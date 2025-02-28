@@ -22,8 +22,8 @@ const FeaturedJobs = () => {
   const featuredJobs = getFeaturedJobs();
   
   return (
-    <section className="w-full">
-      <h2 className="text-2xl font-medium mb-6">Featured Job Opportunities</h2>
+    <section className="w-full bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl p-6">
+      <h2 className="text-2xl font-medium mb-6 text-primary">Featured Job Opportunities</h2>
       <motion.div 
         className="grid gap-4"
         variants={container}
