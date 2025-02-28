@@ -1,4 +1,3 @@
-
 import { Company, Job } from './types';
 
 export const companies: Company[] = [
@@ -377,27 +376,31 @@ export const filterJobs = (filters: {
   locationTypes?: string[];
 }): Job[] => {
   return jobs.filter(job => {
-    // Filter by search query (title or company name)
     if (filters.query && !job.title.toLowerCase().includes(filters.query.toLowerCase()) &&
         !job.company.name.toLowerCase().includes(filters.query.toLowerCase())) {
       return false;
     }
     
-    // Filter by location
     if (filters.location && !job.location.toLowerCase().includes(filters.location.toLowerCase())) {
       return false;
     }
     
-    // Filter by job type
     if (filters.types && filters.types.length > 0 && !filters.types.includes(job.type)) {
       return false;
     }
     
-    // Filter by location type
     if (filters.locationTypes && filters.locationTypes.length > 0 && !filters.locationTypes.includes(job.locationType)) {
       return false;
     }
     
     return true;
   });
+};
+
+export const getAllJobs = (): Job[] => {
+  return jobs;
+};
+
+export const getAllCompanies = (): Company[] => {
+  return companies;
 };
