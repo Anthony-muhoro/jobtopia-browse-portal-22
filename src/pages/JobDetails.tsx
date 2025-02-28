@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   ArrowLeft,
   ExternalLink,
-  Share2 
+  Share2,
+  ArrowRight 
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
