@@ -42,3 +42,38 @@ export interface SearchFilters {
   jobType: JobType[];
   locationType: JobLocation[];
 }
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  title?: string;
+  location?: string;
+  bio?: string;
+  skills?: string[];
+  experience?: {
+    title: string;
+    company: string;
+    startDate: string;
+    endDate?: string;
+    description: string;
+  }[];
+  education?: {
+    institution: string;
+    degree: string;
+    field: string;
+    startDate: string;
+    endDate?: string;
+  }[];
+  resume?: string;
+}
+
+export interface JobApplication {
+  id: string;
+  jobId: string;
+  userId: string;
+  status: 'Applied' | 'Reviewing' | 'Interview' | 'Offer' | 'Rejected';
+  appliedAt: string;
+  notes?: string;
+}

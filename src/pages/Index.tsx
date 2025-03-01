@@ -8,8 +8,9 @@ import FeaturedJobs from "@/components/FeaturedJobs";
 import PageTransition from "@/components/PageTransition";
 import { getLatestJobs, filterJobs } from "@/lib/data";
 import { SearchFilters as SearchFiltersType } from "@/lib/types";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Briefcase, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Index = () => {
   const [filteredJobs, setFilteredJobs] = useState(getLatestJobs(4));
@@ -82,14 +83,40 @@ const Index = () => {
                 </div>
               </section>
               
-              <section className="glass-card rounded-xl p-8 mt-8 text-center">
-                <div className="max-w-2xl mx-auto space-y-4">
-                  <h2 className="text-2xl font-medium">For Employers</h2>
-                  <p className="text-muted-foreground">
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                <motion.div 
+                  className="glass-card rounded-xl p-8 text-center hover:shadow-md transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="mx-auto size-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <Briefcase className="size-8 text-primary" />
+                  </div>
+                  <h2 className="text-2xl font-medium mb-3">For Employers</h2>
+                  <p className="text-muted-foreground mb-6">
                     Ready to hire top talent? Post a job listing and reach thousands of qualified candidates.
                   </p>
-                  <Button className="mt-2">Post a Job</Button>
-                </div>
+                  <Button asChild>
+                    <Link to="/for-employers">Post a Job</Link>
+                  </Button>
+                </motion.div>
+                
+                <motion.div 
+                  className="glass-card rounded-xl p-8 text-center hover:shadow-md transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="mx-auto size-16 bg-secondary/10 rounded-full flex items-center justify-center mb-4">
+                    <UserPlus className="size-8 text-secondary" />
+                  </div>
+                  <h2 className="text-2xl font-medium mb-3">Job Seekers</h2>
+                  <p className="text-muted-foreground mb-6">
+                    Track your applications, save favorite jobs, and manage your profile all in one place.
+                  </p>
+                  <Button asChild variant="secondary">
+                    <Link to="/dashboard">Go to Dashboard</Link>
+                  </Button>
+                </motion.div>
               </section>
             </div>
           </div>

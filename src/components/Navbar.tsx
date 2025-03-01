@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Briefcase, Menu, X } from "lucide-react";
+import { Briefcase, Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -69,11 +69,27 @@ const Navbar = () => {
             variant="outline" 
             size="sm" 
             className="hidden md:inline-flex"
+            asChild
           >
-            For Employers
+            <Link to="/for-employers">For Employers</Link>
           </Button>
-          <Button size="sm" className="hidden md:inline-flex">
-            Post a Job
+          <Button 
+            size="sm" 
+            className="hidden md:inline-flex"
+            asChild
+          >
+            <Link to="/post-job">Post a Job</Link>
+          </Button>
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden md:inline-flex"
+            asChild
+          >
+            <Link to="/dashboard">
+              <User className="h-5 w-5" />
+            </Link>
           </Button>
           
           {/* Mobile Menu Toggle */}
@@ -125,20 +141,29 @@ const Navbar = () => {
               >
                 Browse Jobs
               </MobileNavLink>
+              <MobileNavLink 
+                to="/dashboard" 
+                active={location.pathname.startsWith("/dashboard")}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                My Dashboard
+              </MobileNavLink>
               
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
                   className="w-full"
+                  asChild
                 >
-                  For Employers
+                  <Link to="/for-employers">For Employers</Link>
                 </Button>
                 <Button 
                   size="sm"
                   className="w-full"
+                  asChild
                 >
-                  Post a Job
+                  <Link to="/post-job">Post a Job</Link>
                 </Button>
               </div>
             </nav>
