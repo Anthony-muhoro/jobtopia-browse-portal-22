@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Briefcase, Menu, X, User, Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -82,6 +83,8 @@ const Navbar = () => {
           </Button>
           
           <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
+            
             <Button
               variant="ghost"
               size="icon"
@@ -170,6 +173,10 @@ const Navbar = () => {
               >
                 Employer Dashboard
               </MobileNavLink>
+              
+              <div className="flex justify-center my-2">
+                <ThemeToggle />
+              </div>
               
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <Button 
