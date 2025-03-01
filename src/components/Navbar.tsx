@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Briefcase, Menu, X, User } from "lucide-react";
+import { Briefcase, Menu, X, User, Building } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -81,16 +81,31 @@ const Navbar = () => {
             <Link to="/post-job">Post a Job</Link>
           </Button>
           
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden md:inline-flex"
-            asChild
-          >
-            <Link to="/dashboard">
-              <User className="h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="hidden md:flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="relative"
+              title="Employee Dashboard"
+            >
+              <Link to="/dashboard">
+                <User className="h-5 w-5" />
+              </Link>
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="relative"
+              title="Employer Dashboard"
+            >
+              <Link to="/employer-dashboard">
+                <Building className="h-5 w-5" />
+              </Link>
+            </Button>
+          </div>
           
           {/* Mobile Menu Toggle */}
           <Button 
@@ -146,7 +161,14 @@ const Navbar = () => {
                 active={location.pathname.startsWith("/dashboard")}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                My Dashboard
+                Employee Dashboard
+              </MobileNavLink>
+              <MobileNavLink 
+                to="/employer-dashboard" 
+                active={location.pathname.startsWith("/employer-dashboard")}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Employer Dashboard
               </MobileNavLink>
               
               <div className="grid grid-cols-2 gap-2 mt-2">

@@ -8,6 +8,7 @@ import CompanyProfile from "./pages/CompanyProfile";
 import ForEmployers from "./pages/ForEmployers";
 import PostJob from "./pages/PostJob";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
+import EmployerDashboard from "./pages/EmployerDashboard";
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/for-employers" element={<ForEmployers />} />
         <Route path="/post-job" element={<PostJob />} />
         <Route path="/dashboard" element={<EmployeeDashboard />} />
+        <Route path="/employer-dashboard" element={<EmployerDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
