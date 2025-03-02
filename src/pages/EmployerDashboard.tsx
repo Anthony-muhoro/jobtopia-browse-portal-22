@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -836,4 +837,325 @@ const EmployerDashboard = () => {
       case "settings":
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font
+            <h2 className="text-2xl font-semibold">Account Settings</h2>
+            
+            <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
+              <div className="p-6">
+                <h3 className="font-medium mb-6">Profile Settings</h3>
+                
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="settings-name">Full Name</Label>
+                      <Input 
+                        id="settings-name" 
+                        placeholder="Your full name"
+                        defaultValue="Admin User"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="settings-email">Email</Label>
+                      <Input 
+                        id="settings-email" 
+                        type="email"
+                        placeholder="Your email"
+                        defaultValue="admin@techcorp-solutions.example.com"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="settings-company">Company Name</Label>
+                      <Input 
+                        id="settings-company" 
+                        placeholder="Your company name"
+                        defaultValue={mockCompanyData.name}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="settings-phone">Phone</Label>
+                      <Input 
+                        id="settings-phone" 
+                        placeholder="Your phone number"
+                        defaultValue="+1 (555) 987-6543"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="settings-logo">Company Logo</Label>
+                    <div className="flex items-center gap-4">
+                      <img 
+                        src={mockCompanyData.logo} 
+                        alt="Company Logo" 
+                        className="w-16 h-16 object-contain border border-border rounded-lg"
+                      />
+                      <Button variant="outline">
+                        <Upload className="h-4 w-4 mr-2" /> Upload New Logo
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="settings-description">Company Description</Label>
+                    <textarea 
+                      id="settings-description" 
+                      className="w-full min-h-[100px] p-3 text-base border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder="Describe your company"
+                      defaultValue={mockCompanyData.description}
+                    />
+                  </div>
+                </div>
+                
+                <div className="mt-6 pt-6 border-t border-border flex justify-end">
+                  <Button>Save Changes</Button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
+              <div className="p-6">
+                <h3 className="font-medium mb-6">Notification Settings</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">Email Notifications</p>
+                      <p className="text-sm text-muted-foreground">Receive email notifications about new applicants</p>
+                    </div>
+                    <div className="flex items-center h-6">
+                      <input 
+                        type="checkbox" 
+                        id="email-notifications" 
+                        defaultChecked 
+                        className="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">Job Application Updates</p>
+                      <p className="text-sm text-muted-foreground">Get notified when applicants update their application</p>
+                    </div>
+                    <div className="flex items-center h-6">
+                      <input 
+                        type="checkbox" 
+                        id="application-updates" 
+                        defaultChecked 
+                        className="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">Marketing Communications</p>
+                      <p className="text-sm text-muted-foreground">Receive newsletters and promotional content</p>
+                    </div>
+                    <div className="flex items-center h-6">
+                      <input 
+                        type="checkbox" 
+                        id="marketing-comms" 
+                        className="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 pt-6 border-t border-border flex justify-end">
+                  <Button>Save Preferences</Button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden">
+              <div className="p-6">
+                <h3 className="font-medium mb-6">Account Security</h3>
+                
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="settings-password">Current Password</Label>
+                    <Input 
+                      id="settings-password" 
+                      type="password"
+                      placeholder="Enter your current password"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="settings-new-password">New Password</Label>
+                      <Input 
+                        id="settings-new-password" 
+                        type="password"
+                        placeholder="Enter new password"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="settings-confirm-password">Confirm New Password</Label>
+                      <Input 
+                        id="settings-confirm-password" 
+                        type="password"
+                        placeholder="Confirm new password"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-border flex justify-end">
+                    <Button>Change Password</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        
+      default:
+        return <div>Select a tab</div>;
+    }
+  };
+
+  return (
+    <PageTransition>
+      <div className="min-h-screen bg-muted/10">
+        <Navbar />
+        
+        <main className="pt-24 pb-16">
+          <div className="page-container">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Sidebar */}
+              <div className="w-full md:w-64">
+                <div className="bg-card rounded-lg border border-border shadow-sm p-4 sticky top-24">
+                  <div className="flex flex-col space-y-1">
+                    <Button
+                      variant={activeTab === "jobs" ? "secondary" : "ghost"}
+                      className="justify-start"
+                      onClick={() => handleTabChange("jobs")}
+                    >
+                      <Briefcase className="mr-2 h-4 w-4" />
+                      Job Postings
+                    </Button>
+                    <Button
+                      variant={activeTab === "applicants" ? "secondary" : "ghost"}
+                      className="justify-start"
+                      onClick={() => handleTabChange("applicants")}
+                    >
+                      <Users className="mr-2 h-4 w-4" />
+                      Applicants
+                    </Button>
+                    <Button
+                      variant={activeTab === "company" ? "secondary" : "ghost"}
+                      className="justify-start"
+                      onClick={() => handleTabChange("company")}
+                    >
+                      <Building className="mr-2 h-4 w-4" />
+                      Company Profile
+                    </Button>
+                    <Button
+                      variant={activeTab === "stats" ? "secondary" : "ghost"}
+                      className="justify-start"
+                      onClick={() => handleTabChange("stats")}
+                    >
+                      <BarChart3 className="mr-2 h-4 w-4" />
+                      Analytics
+                    </Button>
+                    <Button
+                      variant={activeTab === "settings" ? "secondary" : "ghost"}
+                      className="justify-start"
+                      onClick={() => handleTabChange("settings")}
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </Button>
+                  </div>
+                  
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <Button 
+                      className="w-full relative"
+                      variant="outline"
+                      onClick={() => setShowNotifications(!showNotifications)}
+                    >
+                      <BellRing className="mr-2 h-4 w-4" />
+                      Notifications
+                      {unreadCount > 0 && (
+                        <span className="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 bg-primary text-primary-foreground text-xs font-medium rounded-full min-w-5 h-5 flex items-center justify-center px-1">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </Button>
+                    
+                    {showNotifications && (
+                      <div className="mt-2 bg-card rounded-lg border border-border shadow-lg p-4">
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="font-medium">Notifications</h3>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={markAllNotificationsAsRead}
+                            className="text-xs h-8"
+                          >
+                            Mark all as read
+                          </Button>
+                        </div>
+                        <div className="max-h-80 overflow-y-auto space-y-2">
+                          {notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`p-3 rounded-md text-sm ${
+                                !notification.read ? "bg-primary/5" : ""
+                              }`}
+                              onClick={() => markNotificationAsRead(notification.id)}
+                            >
+                              <div className="flex gap-2 items-start">
+                                <div className="shrink-0 mt-0.5">
+                                  {notification.type === "application" ? (
+                                    <Users className="h-4 w-4 text-blue-500" />
+                                  ) : notification.type === "message" ? (
+                                    <Mail className="h-4 w-4 text-green-500" />
+                                  ) : notification.type === "alert" ? (
+                                    <Clock className="h-4 w-4 text-yellow-500" />
+                                  ) : (
+                                    <BellRing className="h-4 w-4 text-purple-500" />
+                                  )}
+                                </div>
+                                <div>
+                                  <p className="font-medium">{notification.title}</p>
+                                  <p className="text-muted-foreground text-xs mt-1">{notification.message}</p>
+                                  <p className="text-xs mt-2 text-muted-foreground">{notification.time}</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Main Content */}
+              <div className="flex-1">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {renderDashboardContent()}
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </PageTransition>
+  );
+};
+
+export default EmployerDashboard;
