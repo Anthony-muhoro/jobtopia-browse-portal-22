@@ -30,7 +30,8 @@ import {
   Filter,
   RefreshCw,
   AlertTriangle,
-  CheckSquare
+  CheckSquare,
+  Upload
 } from "lucide-react";
 
 type TabType = "jobs" | "applicants" | "company" | "stats" | "settings";
@@ -835,4 +836,4 @@ const EmployerDashboard = () => {
       case "settings":
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Account
+            <h2 className="text-2xl font
