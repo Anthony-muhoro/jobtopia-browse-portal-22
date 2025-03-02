@@ -1,10 +1,10 @@
-
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
 import { 
@@ -22,10 +22,19 @@ import {
   Mail,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  BellRing,
+  Download,
+  Archive,
+  Star,
+  Filter,
+  RefreshCw,
+  AlertTriangle,
+  CheckSquare
 } from "lucide-react";
 
 type TabType = "jobs" | "applicants" | "company" | "stats" | "settings";
+type NotificationType = "application" | "message" | "alert" | "system";
 
 // Mock data for employer dashboard
 const mockJobPostings = [
@@ -141,20 +150,153 @@ const mockStatistics = {
   topPerformingJob: "Senior Frontend Developer"
 };
 
+// New notification data
+const mockNotifications = [
+  {
+    id: "notif1",
+    type: "application" as NotificationType,
+    title: "New Application",
+    message: "Sarah Mitchell applied for Senior Frontend Developer",
+    time: "2 minutes ago",
+    read: false
+  },
+  {
+    id: "notif2",
+    type: "message" as NotificationType,
+    title: "New Message",
+    message: "John Doe replied to your message",
+    time: "1 hour ago",
+    read: false
+  },
+  {
+    id: "notif3",
+    type: "alert" as NotificationType,
+    title: "Job Posting Expiring",
+    message: "UX Designer posting expires in 2 days",
+    time: "5 hours ago",
+    read: true
+  },
+  {
+    id: "notif4",
+    type: "system" as NotificationType,
+    title: "System Update",
+    message: "New features available in your dashboard",
+    time: "1 day ago",
+    read: true
+  }
+];
+
 const EmployerDashboard = () => {
   const [activeTab, setActiveTab] = useState<TabType>("jobs");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedApplicants, setSelectedApplicants] = useState<string[]>([]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState(mockNotifications);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [jobFilter, setJobFilter] = useState("all");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Count unread notifications
+    const count = notifications.filter(notif => !notif.read).length;
+    setUnreadCount(count);
+  }, [notifications]);
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
+    setSelectedApplicants([]);
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Implement search functionality here
     console.log("Searching for:", searchQuery);
+    toast.success(`Search results for "${searchQuery}"`);
   };
+
+  const toggleApplicantSelection = (id: string) => {
+    if (selectedApplicants.includes(id)) {
+      setSelectedApplicants(selectedApplicants.filter(appId => appId !== id));
+    } else {
+      setSelectedApplicants([...selectedApplicants, id]);
+    }
+  };
+
+  const selectAllApplicants = () => {
+    if (selectedApplicants.length === mockApplicants.length) {
+      setSelectedApplicants([]);
+    } else {
+      setSelectedApplicants(mockApplicants.map(app => app.id));
+    }
+  };
+
+  const handleBulkAction = (action: string) => {
+    if (selectedApplicants.length === 0) {
+      toast.error("No applicants selected");
+      return;
+    }
+
+    // Simulate bulk actions
+    toast.success(`${action} ${selectedApplicants.length} applicants`);
+    console.log(`${action} applicants:`, selectedApplicants);
+    
+    // Reset selection after action
+    setSelectedApplicants([]);
+  };
+
+  const markAllNotificationsAsRead = () => {
+    const updatedNotifications = notifications.map(notif => ({
+      ...notif,
+      read: true
+    }));
+    setNotifications(updatedNotifications);
+    setUnreadCount(0);
+    toast.success("All notifications marked as read");
+  };
+
+  const markNotificationAsRead = (id: string) => {
+    const updatedNotifications = notifications.map(notif => 
+      notif.id === id ? { ...notif, read: true } : notif
+    );
+    setNotifications(updatedNotifications);
+    setUnreadCount(prev => prev - 1);
+  };
+
+  const toggleSort = () => {
+    setSortDirection(prev => prev === "asc" ? "desc" : "asc");
+    toast.info(`Sorted by date ${sortDirection === "asc" ? "newest first" : "oldest first"}`);
+  };
+
+  const filteredApplicants = mockApplicants
+    .filter(app => {
+      // Filter by status
+      if (statusFilter !== "all" && app.status.toLowerCase() !== statusFilter.toLowerCase()) {
+        return false;
+      }
+      
+      // Filter by job
+      if (jobFilter !== "all" && app.jobTitle !== jobFilter) {
+        return false;
+      }
+      
+      // Search query
+      if (searchQuery) {
+        return app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+               app.jobTitle.toLowerCase().includes(searchQuery.toLowerCase());
+      }
+      
+      return true;
+    })
+    .sort((a, b) => {
+      // Sort by date
+      const dateA = new Date(a.appliedDate).getTime();
+      const dateB = new Date(b.appliedDate).getTime();
+      
+      return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
+    });
 
   const renderDashboardContent = () => {
     switch (activeTab) {
@@ -184,11 +326,38 @@ const EmployerDashboard = () => {
                   </div>
                   <Button type="submit">Search</Button>
                 </form>
-                <select className="h-10 px-3 rounded-md border border-input">
+                <select 
+                  className="h-10 px-3 rounded-md border border-input"
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  value={statusFilter}
+                >
                   <option value="all">All Status</option>
                   <option value="active">Active</option>
                   <option value="closed">Closed</option>
                 </select>
+                
+                <Button variant="outline" onClick={toggleSort} className="flex items-center gap-2">
+                  <RefreshCw className="h-4 w-4" />
+                  Sort {sortDirection === "asc" ? "↑" : "↓"}
+                </Button>
+              </div>
+              
+              {/* Enhanced Job Management Tools */}
+              <div className="bg-card rounded-lg p-4 border border-border">
+                <div className="flex flex-wrap gap-3">
+                  <Button variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" /> Export Jobs
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Archive className="h-4 w-4 mr-2" /> Archive Selected
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Star className="h-4 w-4 mr-2" /> Feature Selected
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Filter className="h-4 w-4 mr-2" /> Advanced Filters
+                  </Button>
+                </div>
               </div>
               
               {/* Job listings */}
@@ -270,7 +439,11 @@ const EmployerDashboard = () => {
                   </div>
                   <Button type="submit">Search</Button>
                 </form>
-                <select className="h-10 px-3 rounded-md border border-input">
+                <select 
+                  className="h-10 px-3 rounded-md border border-input"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   <option value="all">All Status</option>
                   <option value="applied">Applied</option>
                   <option value="reviewing">Reviewing</option>
@@ -278,19 +451,83 @@ const EmployerDashboard = () => {
                   <option value="offer">Offer</option>
                   <option value="rejected">Rejected</option>
                 </select>
-                <select className="h-10 px-3 rounded-md border border-input">
+                <select 
+                  className="h-10 px-3 rounded-md border border-input"
+                  value={jobFilter}
+                  onChange={(e) => setJobFilter(e.target.value)}
+                >
                   <option value="all">All Jobs</option>
-                  <option value="job1">Senior Frontend Developer</option>
-                  <option value="job2">UX Designer</option>
-                  <option value="job3">Product Manager</option>
-                  <option value="job4">Backend Developer</option>
+                  <option value="Senior Frontend Developer">Senior Frontend Developer</option>
+                  <option value="UX Designer">UX Designer</option>
+                  <option value="Product Manager">Product Manager</option>
+                  <option value="Backend Developer">Backend Developer</option>
                 </select>
+              </div>
+              
+              {/* Bulk Actions */}
+              <div className="bg-card rounded-lg p-4 border border-border">
+                <div className="flex flex-wrap gap-3 items-center">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={selectAllApplicants}
+                    className={selectedApplicants.length === mockApplicants.length ? "bg-primary/10" : ""}
+                  >
+                    <CheckSquare className="h-4 w-4 mr-2" />
+                    {selectedApplicants.length === mockApplicants.length ? "Deselect All" : "Select All"}
+                  </Button>
+                  
+                  {selectedApplicants.length > 0 && (
+                    <span className="text-sm text-muted-foreground mr-2">
+                      {selectedApplicants.length} selected
+                    </span>
+                  )}
+                  
+                  <div className="h-6 w-px bg-border mx-1"></div>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleBulkAction("Downloaded")}
+                    disabled={selectedApplicants.length === 0}
+                  >
+                    <Download className="h-4 w-4 mr-2" /> Download Resumes
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleBulkAction("Emailed")}
+                    disabled={selectedApplicants.length === 0}
+                  >
+                    <Mail className="h-4 w-4 mr-2" /> Email Selected
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleBulkAction("Advanced")}
+                    disabled={selectedApplicants.length === 0}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" /> Move to Interview
+                  </Button>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleBulkAction("Rejected")}
+                    disabled={selectedApplicants.length === 0}
+                  >
+                    <XCircle className="h-4 w-4 mr-2" /> Reject Selected
+                  </Button>
+                </div>
               </div>
               
               {/* Applicants list */}
               <div className="bg-card rounded-lg border border-border overflow-hidden">
                 <div className="grid grid-cols-12 gap-4 p-4 font-medium text-sm border-b border-border bg-muted/30">
-                  <div className="col-span-3">Applicant</div>
+                  <div className="col-span-1"></div>
+                  <div className="col-span-2">Applicant</div>
                   <div className="col-span-3">Job</div>
                   <div className="col-span-1">Match</div>
                   <div className="col-span-2">Applied Date</div>
@@ -298,12 +535,22 @@ const EmployerDashboard = () => {
                   <div className="col-span-2 text-right">Actions</div>
                 </div>
                 
-                {mockApplicants.map((applicant) => (
+                {filteredApplicants.map((applicant) => (
                   <div 
                     key={applicant.id}
-                    className="grid grid-cols-12 gap-4 p-4 text-sm border-b border-border last:border-0 items-center hover:bg-muted/20"
+                    className={`grid grid-cols-12 gap-4 p-4 text-sm border-b border-border last:border-0 items-center hover:bg-muted/20 ${
+                      selectedApplicants.includes(applicant.id) ? "bg-primary/5" : ""
+                    }`}
                   >
-                    <div className="col-span-3 font-medium">{applicant.name}</div>
+                    <div className="col-span-1">
+                      <input 
+                        type="checkbox" 
+                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        checked={selectedApplicants.includes(applicant.id)}
+                        onChange={() => toggleApplicantSelection(applicant.id)}
+                      />
+                    </div>
+                    <div className="col-span-2 font-medium">{applicant.name}</div>
                     <div className="col-span-3 text-muted-foreground">{applicant.jobTitle}</div>
                     <div className="col-span-1">
                       <div className="w-full bg-muted rounded-full h-2">
@@ -346,6 +593,18 @@ const EmployerDashboard = () => {
                     </div>
                   </div>
                 ))}
+                
+                {filteredApplicants.length === 0 && (
+                  <div className="p-8 text-center">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
+                      <AlertTriangle className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-lg font-medium mb-2">No applicants found</h3>
+                    <p className="text-muted-foreground">
+                      Try adjusting your search or filter criteria
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -576,226 +835,4 @@ const EmployerDashboard = () => {
       case "settings":
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">Account Settings</h2>
-            
-            <div className="bg-card rounded-lg border border-border overflow-hidden">
-              <div className="p-6">
-                <h3 className="text-xl font-medium mb-4">Notification Preferences</h3>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">New applicant alerts</p>
-                      <p className="text-sm text-muted-foreground">Receive notifications when someone applies to your job</p>
-                    </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" value="" className="sr-only peer" defaultChecked />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Job status changes</p>
-                      <p className="text-sm text-muted-foreground">Notifications about expired or auto-renewed job postings</p>
-                    </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" value="" className="sr-only peer" defaultChecked />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium">Marketing emails</p>
-                      <p className="text-sm text-muted-foreground">Receive tips, product updates and inspiration</p>
-                    </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" value="" className="sr-only peer" />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border-t border-border p-6">
-                <h3 className="text-xl font-medium mb-4">Email Preferences</h3>
-                
-                <div className="space-y-4 max-w-xl">
-                  <div className="space-y-2">
-                    <Label htmlFor="recruit-email">Recruiting Email</Label>
-                    <Input
-                      id="recruit-email"
-                      type="email"
-                      defaultValue="recruiting@techcorp-solutions.example.com"
-                    />
-                    <p className="text-sm text-muted-foreground">All applicant communications will be sent to this email</p>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-email">Admin Email</Label>
-                    <Input
-                      id="admin-email"
-                      type="email"
-                      defaultValue="admin@techcorp-solutions.example.com"
-                    />
-                    <p className="text-sm text-muted-foreground">Account notifications and billing information</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border-t border-border p-6">
-                <h3 className="text-xl font-medium mb-4">Subscription Plan</h3>
-                
-                <div className="bg-muted/30 p-4 rounded-lg border border-border">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium">Premium Employer Plan</p>
-                      <p className="text-sm text-muted-foreground">$199/month, billed monthly</p>
-                    </div>
-                    <Button variant="outline">Manage Plan</Button>
-                  </div>
-                  
-                  <div className="mt-4 pt-4 border-t border-border">
-                    <p className="font-medium mb-2">Your plan includes:</p>
-                    <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>• Unlimited job postings</li>
-                      <li>• Featured job listings</li>
-                      <li>• Advanced analytics</li>
-                      <li>• Candidate management tools</li>
-                      <li>• Email integration</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="border-t border-border p-6">
-                <h3 className="text-xl font-medium mb-4">Security Settings</h3>
-                
-                <div className="space-y-4 max-w-xl">
-                  <Button variant="outline">Change Password</Button>
-                  <Button variant="outline">Two-Factor Authentication</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-        
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <PageTransition>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        
-        <main className="flex-1 pt-24">
-          <div className="page-container">
-            <div className="flex flex-col md:flex-row gap-6 lg:gap-8">
-              {/* Sidebar */}
-              <div className="w-full md:w-64 shrink-0">
-                <div className="bg-card rounded-lg border border-border sticky top-24">
-                  <div className="p-6 border-b border-border">
-                    <h2 className="font-medium mb-2">TechCorp Solutions</h2>
-                    <p className="text-sm text-muted-foreground">Employer Dashboard</p>
-                  </div>
-                  
-                  <nav className="p-2">
-                    <button
-                      className={`w-full text-left px-4 py-2 rounded-md text-sm mb-1 flex items-center ${
-                        activeTab === "jobs" 
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-muted-foreground hover:bg-muted/80"
-                      }`}
-                      onClick={() => handleTabChange("jobs")}
-                    >
-                      <Briefcase className="mr-2 h-4 w-4" />
-                      Job Postings
-                    </button>
-                    
-                    <button
-                      className={`w-full text-left px-4 py-2 rounded-md text-sm mb-1 flex items-center ${
-                        activeTab === "applicants" 
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-muted-foreground hover:bg-muted/80"
-                      }`}
-                      onClick={() => handleTabChange("applicants")}
-                    >
-                      <Users className="mr-2 h-4 w-4" />
-                      Applicants
-                    </button>
-                    
-                    <button
-                      className={`w-full text-left px-4 py-2 rounded-md text-sm mb-1 flex items-center ${
-                        activeTab === "company" 
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-muted-foreground hover:bg-muted/80"
-                      }`}
-                      onClick={() => handleTabChange("company")}
-                    >
-                      <Building className="mr-2 h-4 w-4" />
-                      Company Profile
-                    </button>
-                    
-                    <button
-                      className={`w-full text-left px-4 py-2 rounded-md text-sm mb-1 flex items-center ${
-                        activeTab === "stats" 
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-muted-foreground hover:bg-muted/80"
-                      }`}
-                      onClick={() => handleTabChange("stats")}
-                    >
-                      <BarChart3 className="mr-2 h-4 w-4" />
-                      Analytics
-                    </button>
-                    
-                    <button
-                      className={`w-full text-left px-4 py-2 rounded-md text-sm mb-1 flex items-center ${
-                        activeTab === "settings" 
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-muted-foreground hover:bg-muted/80"
-                      }`}
-                      onClick={() => handleTabChange("settings")}
-                    >
-                      <Settings className="mr-2 h-4 w-4" />
-                      Settings
-                    </button>
-                  </nav>
-                  
-                  <div className="p-6 border-t border-border">
-                    <Button className="w-full" onClick={() => navigate("/post-job")}>
-                      <Plus className="mr-2 h-4 w-4" /> Post New Job
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Main content */}
-              <div className="flex-1">
-                <motion.div
-                  key={activeTab}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {renderDashboardContent()}
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </main>
-        
-        <footer className="bg-muted/20 border-t border-border mt-20">
-          <div className="page-container py-8 text-center text-sm text-muted-foreground">
-            <p>© 2023 Jobtopia. All rights reserved.</p>
-          </div>
-        </footer>
-      </div>
-    </PageTransition>
-  );
-};
-
-export default EmployerDashboard;
+            <h2 className="text-2xl font-semibold">Account
