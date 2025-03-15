@@ -1,69 +1,88 @@
-# Welcome to your Lovable project
 
-## Project info
+# Jobtopia: Find Your Dream Job
 
-**URL**: https://lovable.dev/projects/6f838686-d8fd-442f-94e6-905e686aed32
+<div align="center">
+  <img src="/public/og-image.png" alt="Jobtopia" width="500">
+  <p><em>Connect with opportunities that match your skills and aspirations</em></p>
+</div>
 
-## How can I edit this code?
+## 🚀 About Jobtopia
 
-There are several ways of editing your application.
+Jobtopia is a modern job search platform designed to connect talented professionals with their dream careers. Our platform uses intelligent matching algorithms to help job seekers find positions that align with their skills, experience, and career goals.
 
-**Use Lovable**
+For employers, Jobtopia offers powerful tools to post jobs, manage applicants, and find the perfect candidates for their teams.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6f838686-d8fd-442f-94e6-905e686aed32) and start prompting.
+## ✨ Features
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Intelligent Job Matching** - Find jobs that match your skills and preferences
+- **Company Profiles** - Research potential employers before applying
+- **Employer Dashboard** - Powerful tools for posting jobs and managing candidates
+- **Real-time Notifications** - Stay updated on application status and new opportunities
+- **Responsive Design** - Seamless experience across desktop and mobile devices
 
-**Use your preferred IDE**
+## 🛠️ Technologies
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+This project is built with modern web technologies:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **React** - Frontend library for building user interfaces
+- **TypeScript** - Type-safe JavaScript for better development experience
+- **Vite** - Next-generation frontend tooling
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Beautifully designed components
+- **Lucide Icons** - Beautiful, consistent icons
+- **Framer Motion** - Animation library for React
 
-Follow these steps:
+## 🚀 Getting Started
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+### Prerequisites
+
+- Node.js (v16+)
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 📱 Live Preview
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Visit our [Jobtopia project](https://lovable.dev/projects/6f838686-d8fd-442f-94e6-905e686aed32) to see the application in action.
 
-**Use GitHub Codespaces**
+## 🌐 Deployment
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
+### Using Lovable
 
 Simply open [Lovable](https://lovable.dev/projects/6f838686-d8fd-442f-94e6-905e686aed32) and click on Share -> Publish.
 
-## I want to use a custom domain - is that possible?
+### Custom Domain
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+For custom domain deployments, we recommend using Netlify. Visit our [documentation](https://docs.lovable.dev/tips-tricks/custom-domain/) for more details.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📞 Contact
+
+For any inquiries or support, please contact:
+
+- Email: contact@jobtopia.com
+- Phone: +1 (555) 555-5555
+- GitHub: [github.com/jobtopia](https://github.com/jobtopia)
+
+---
+
+<div align="center">
+  <p>Built with ❤️ using <a href="https://lovable.dev">Lovable</a></p>
+</div>
