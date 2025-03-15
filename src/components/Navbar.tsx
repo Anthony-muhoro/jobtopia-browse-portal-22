@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Briefcase, Menu, X, User, Building } from "lucide-react";
+import { Briefcase, Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -94,18 +93,6 @@ const Navbar = () => {
             >
               <Link to="/dashboard">
                 <User className="h-5 w-5" />
-              </Link>
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="relative"
-              title="Employer Dashboard"
-            >
-              <Link to="/employer-dashboard">
-                <Building className="h-5 w-5" />
               </Link>
             </Button>
           </div>
