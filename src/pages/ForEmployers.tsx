@@ -1,9 +1,9 @@
-
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
 import { CheckCircle, Users, TrendingUp, Globe, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -191,11 +191,7 @@ const ForEmployers = () => {
           </section>
         </main>
         
-        <footer className="bg-muted/20 border-t border-border">
-          <div className="page-container py-8 text-center text-sm text-muted-foreground">
-            <p>© 2023 Jobtopia. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );

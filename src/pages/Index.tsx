@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -6,6 +5,7 @@ import SearchFilters from "@/components/SearchFilters";
 import JobCard from "@/components/JobCard";
 import FeaturedJobs from "@/components/FeaturedJobs";
 import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
 import { getLatestJobs, filterJobs } from "@/lib/data";
 import { SearchFilters as SearchFiltersType } from "@/lib/types";
 import { ArrowRight, Briefcase, UserPlus } from "lucide-react";
@@ -122,11 +122,7 @@ const Index = () => {
           </div>
         </main>
         
-        <footer className="bg-muted/20 border-t border-border">
-          <div className="page-container py-8 text-center text-sm text-muted-foreground">
-            <p>© 2023 Jobtopia. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );

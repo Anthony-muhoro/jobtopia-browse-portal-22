@@ -1,9 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
 import { getAllCompanies } from "@/lib/data";
 import { Company } from "@/lib/types";
 import { Search } from "lucide-react";
@@ -152,11 +152,7 @@ const Companies = () => {
           </div>
         </main>
         
-        <footer className="bg-muted/20 border-t border-border">
-          <div className="page-container py-8 text-center text-sm text-muted-foreground">
-            <p>© 2023 Jobtopia. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );
